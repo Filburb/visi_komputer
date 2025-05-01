@@ -33,7 +33,7 @@ def ensure_folder(folder_path):
         os.makedirs(folder_path)
 
 def main():
-    input_folder = "Hugh Jackman"    # Folder input gambar
+    input_folder = "00000"    # Folder input gambar
     output_folder = "output"          # Folder output hasil
     ensure_folder(output_folder)
 

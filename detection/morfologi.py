@@ -13,8 +13,8 @@ def apply_erosion(image, kernel_size=3, iterations=1):
     eroded = cv2.erode(image, kernel, iterations=iterations)
     return eroded
 
-def apply_skeletonization(image):
-    """Skeletonisasi citra"""
+def apply_skeletonization(image, max_iterations=100):
+    """Skeletonisasi citra dengan batas maksimum iterasi"""
     if len(image.shape) == 3:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -23,10 +23,9 @@ def apply_skeletonization(image):
 
     skeleton = np.zeros(binary.shape, np.uint8)
     element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
-    temp = np.zeros(binary.shape, np.uint8)
-    eroded = np.zeros(binary.shape, np.uint8)
 
     img = binary.copy()
+    iterations = 0
 
     while True:
         eroded = cv2.erode(img, element)
@@ -35,7 +34,9 @@ def apply_skeletonization(image):
         skeleton = cv2.bitwise_or(skeleton, temp)
         img = eroded.copy()
 
-        if cv2.countNonZero(img) == 0:
+        iterations += 1
+        if cv2.countNonZero(img) == 0 or iterations >= max_iterations:
             break
 
+    print(f"Skeletonisasi selesai dalam {iterations} iterasi")  # (opsional untuk debug)
     return skeleton
