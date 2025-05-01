@@ -18,7 +18,6 @@ def apply_skeletonization(image, max_iterations=100):
     if len(image.shape) == 3:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Threshold untuk binarisasi
     _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
     skeleton = np.zeros(binary.shape, np.uint8)
@@ -38,5 +37,17 @@ def apply_skeletonization(image, max_iterations=100):
         if cv2.countNonZero(img) == 0 or iterations >= max_iterations:
             break
 
-    print(f"Skeletonisasi selesai dalam {iterations} iterasi")  # (opsional untuk debug)
+    print(f"Skeletonisasi selesai dalam {iterations} iterasi")
     return skeleton
+
+def apply_opening(image, kernel_size=3):
+    """Menerapkan operasi Opening (Erosi → Dilasi)"""
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    opened = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+    return opened
+
+def apply_closing(image, kernel_size=3):
+    """Menerapkan operasi Closing (Dilasi → Erosi)"""
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    closed = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    return closed

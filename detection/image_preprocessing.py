@@ -1,9 +1,11 @@
 import cv2
+import numpy as np
 
-def enhance_contrast(image, alpha=1.5, beta=0):
+def normalize_image(image):
     """
-    Peningkatan kontras dengan mengalikan pixel dengan alpha dan menambahkan beta.
-    Alpha > 1 meningkatkan kontras.
+    Normalisasi citra: skala nilai pixel ke rentang 0–255 (kontras disesuaikan).
+    Cocok untuk pemrosesan visual.
     """
-    new_image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
-    return new_image
+    norm_img = np.zeros_like(image)
+    normalized = cv2.normalize(image, norm_img, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
+    return normalized
